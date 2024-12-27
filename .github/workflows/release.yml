@@ -340,10 +340,10 @@ jobs:
           rm languages/python/oso/README.md
           cp README.md languages/python/oso/README.md
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.2
+        uses: pypa/cibuildwheel@v2.22.0
         env:
-          # Skip Python 2.7 and Python 3.5
-          CIBW_SKIP: "cp27-* cp35-* pp27-*"
+          # Skip Python 2.7, Python 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11
+          CIBW_SKIP: "pp27-* cp27-* cp35-* cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*"
           # 64-bit builds only
           CIBW_BUILD: "*64"
           # Used in build.py to find right files
@@ -375,10 +375,10 @@ jobs:
           rm languages/python/oso/README.md
           cp README.md languages/python/oso/README.md
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.2
+        uses: pypa/cibuildwheel@v2.22.0
         env:
-          # Skip Python 2.7 and Python 3.5
-          CIBW_SKIP: "cp27-* cp35-* pp27-*"
+          # Skip Python 2.7, Python 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11
+          CIBW_SKIP: "pp27-* cp27-* cp35-* cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*"
           # 64-bit builds only
           CIBW_BUILD: "*64"
           # Used in build.py to find right files
@@ -412,10 +412,10 @@ jobs:
           rm languages/python/oso/README.md
           cp README.md languages/python/oso/README.md
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.2
+        uses: pypa/cibuildwheel@v2.22.0
         env:
-          # Skip Python 2.7 and Python 3.5
-          CIBW_SKIP: "cp27-* cp35-* pp27-*"
+          # Skip Python 2.7, Python 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11
+          CIBW_SKIP: "pp27-* cp27-* cp35-* cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*"
           # 64-bit builds only
           CIBW_BUILD: "*64"
           # Used in build.py to find right files
@@ -542,7 +542,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version env
@@ -571,7 +571,7 @@ jobs:
     runs-on: macos-11
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version env
@@ -607,41 +607,19 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: wheel
-      # 3.8 is the earliest python for M1
-      - name: "test python 3.8"
-        run: |
-          arch -arm64 /opt/homebrew/opt/python@3.8/bin/python3 -m venv venv38
-          arch -arm64 ./venv38/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel --no-deps --no-index
-          arch -arm64 ./venv38/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel
-          arch -arm64 ./venv38/bin/python test.py
-        working-directory: test
-      - name: "test python 3.9"
-        run: |
-          arch -arm64 /opt/homebrew/opt/python@3.9/bin/python3 -m venv venv39
-          arch -arm64 ./venv39/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel --no-deps --no-index
-          arch -arm64 ./venv39/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel
-          arch -arm64 ./venv39/bin/python test.py
-        working-directory: test
-      - name: "test python 3.10"
-        run: |
-          arch -arm64 /opt/homebrew/opt/python@3.10/bin/python3 -m venv venv310
-          arch -arm64 ./venv310/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel --no-deps --no-index
-          arch -arm64 ./venv310/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel
-          arch -arm64 ./venv310/bin/python test.py
-        working-directory: test
-      - name: "test python 3.11"
-        run: |
-          arch -arm64 /opt/homebrew/opt/python@3.11/bin/python3 -m venv venv311
-          arch -arm64 ./venv311/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel --no-deps --no-index
-          arch -arm64 ./venv311/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel
-          arch -arm64 ./venv311/bin/python test.py
-        working-directory: test
       - name: "test python 3.12"
         run: |
           arch -arm64 /opt/homebrew/opt/python@3.12/bin/python3 -m venv venv312
           arch -arm64 ./venv312/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel --no-deps --no-index
           arch -arm64 ./venv312/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel
           arch -arm64 ./venv312/bin/python test.py
+        working-directory: test
+      - name: "test python 3.13"
+        run: |
+          arch -arm64 /opt/homebrew/opt/python@3.13/bin/python3 -m venv venv313
+          arch -arm64 ./venv313/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel --no-deps --no-index
+          arch -arm64 ./venv313/bin/pip install oso==${{ steps.version.outputs.oso_version }} -f ../wheel
+          arch -arm64 ./venv313/bin/python test.py
         working-directory: test
 
   validate_python_windows:
@@ -650,7 +628,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version env
@@ -679,7 +657,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version env
